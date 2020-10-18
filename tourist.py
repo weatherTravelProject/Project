@@ -90,7 +90,8 @@ def getList():
 def listToExcel(list, name):
     df = pd.DataFrame(list, columns=['景点名称', '级别', '所在区域', '起步价', '销售量', '热度', '地址', '经度', '纬度', '标语', '详情网址'])
     # df.to_csv(name + ".csv", sep=',')
-    writer = pd.ExcelWriter('hotplace.xlsx', engine='xlsxwriter')
+    dirName = 'xlsx'
+    writer = pd.ExcelWriter(dirName+'/hotplace.xlsx', engine='xlsxwriter')
     df.to_excel(writer, sheet_name='Sheet1')
     writer.save()
 
