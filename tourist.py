@@ -95,20 +95,19 @@ def getList():
                 sight_soldnum = 0
             # sight_point = inf.xpath('.//div[@class="result_list"]/div/@data-point')[0]
             sight_point = inf.xpath('.//@data-point')[0]
-            sight_la, sight_lo = sight_point.split(',')
-            print(sight_la, sight_lo)
-            # print(type(sight_point))
+            # sight_la, sight_lo = sight_point.split(',')
+            print(sight_point)
             # .为当前序号，不加则从第一个开始
             sight_url = inf.xpath('.//div[@class="sight_item_pop"]//a/@href')[0]
             sightlist.append(
                 [sight_name, sight_level, sight_area, float(sight_price), int(sight_soldnum), float(sight_hot),
-                 sight_add.replace('地址：', ''), sight_la, sight_lo, sight_slogen, sight_url])
+                 sight_add.replace('地址：', ''), sight_point, sight_slogen, sight_url])
         time.sleep(10)
     return sightlist
 
 
 def listToExcel(list, name):
-    df = pd.DataFrame(list, columns=['景点名称', '级别', '所在区域', '起步价', '销售量', '热度', '地址', '经度', '纬度', '标语', '详情网址'])
+    df = pd.DataFrame(list, columns=['景点名称', '级别', '所在区域', '起步价', '销售量', '热度', '地址', '经纬度', '标语', '详情网址'])
     # df.to_csv(name + ".csv", sep=',')
     dirName = 'xlsx'
     writer = pd.ExcelWriter(dirName+'/hotplace.xlsx', engine='xlsxwriter')
