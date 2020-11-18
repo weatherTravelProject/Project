@@ -8,7 +8,6 @@
     1. getWeather.py中：get_weather(get_district('城市'))
 
 ## map生成（未完成）
-1. 打开https://maplab.amap.com/dev/mapv
-	1. 注册账号
-	2. 打开数据可视化
-	3. 导入CSV文件，选择经纬度行，即可生成地图
+1. 打开html/gdMap.html
+	1. 输入出发地址
+	2. 导入转化好的CSV格式文件，即可生成地图
