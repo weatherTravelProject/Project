@@ -110,12 +110,12 @@
 
     function takeBus(radio) {
         vehicle = radio.value;
-        loadWorkLocation()
+        loadLocation()
     }
 
     function takeDriving(radio) {
         vehicle = radio.value;
-        loadWorkLocation()
+        loadLocation()
     }
 
     function importRentInfo(fileInfo) {
@@ -125,10 +125,10 @@
 
     function locationSelected(e) {
         goAddress = e.poi.name;
-        loadWorkLocation();
+        loadLocation();
     }
 
-    function loadWorkMarker(x, y, locationName) {
+    function loadMarker(x, y, locationName) {
         goMarker = new AMap.Marker({
             map: map,
             title: locationName,
@@ -139,7 +139,7 @@
     }
 
 
-    function loadWorkRange(x, y, t, color, v) {
+    function loadRange(x, y, t, color, v) {
         arrivalRange.search([x, y], t, function(status, result) {
             if (result.bounds) {
                 for (var i = 0; i < result.bounds.length; i++) {
@@ -176,7 +176,7 @@
                 });
                 rentMarkerArray.push(rentMarker);
 
-                rentMarker.content = "<div>房源：<a target = '_blank' href='https://bj.58.com/pinpaigongyu/?key=" + address + "'>" + address + "</a><div>"
+                rentMarker.content = "<div>详情网址：<a target = '_blank' href='https://bj.58.com/pinpaigongyu/?key=" + address + "'>" + address + "</a><div>"
                 rentMarker.on('click', function(e) {
                     infoWindow.setContent(e.target.content);
                     infoWindow.open(map, e.target.getPosition());
@@ -197,7 +197,7 @@
         })
     }
 
-    function delWorkLocation() {
+    function delLocation() {
         if (polygonArray) map.remove(polygonArray);
         if (goMarker) map.remove(goMarker);
         polygonArray = [];
@@ -208,8 +208,8 @@
         rentMarkerArray = [];
     }
 
-    function loadWorkLocation() {
-        delWorkLocation();
+    function loadLocation() {
+        delLocation();
         var geocoder = new AMap.Geocoder({
             city: "广州",
             radius: 1000
@@ -220,8 +220,8 @@
                 var geocode = result.geocodes[0];
                 x = geocode.location.getLng();
                 y = geocode.location.getLat();
-                loadWorkMarker(x, y);
-                loadWorkRange(x, y, 60, "#3f67a5", vehicle);
+                loadMarker(x, y);
+                loadRange(x, y, 60, "#3f67a5", vehicle);
                 map.setZoomAndCenter(12, [x, y]);
             }
         })
@@ -233,7 +233,7 @@
         $.get(fileName, function(data) {
             data = data.split("\n");
             data.forEach(function(item, index) {
-                rent_locations.add(item.split(",")[1]);
+                rent_locations.add(item.split(",")[0]);
             });
             rent_locations.forEach(function(element, index) {
                 addMarkerByAddress(element);

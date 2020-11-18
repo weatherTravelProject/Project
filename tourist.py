@@ -51,7 +51,7 @@ def getList():
                       ' (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
         'X-Requested-With': 'XMLHttpRequest'
     }
-    place = '云浮'
+    place = '天河'
     url = 'http://piao.qunar.com/ticket/list.htm?keyword=' + place + '&region=&from=mpl_search_suggest&page={}'
     # url = 'https://travel.qunar.com/p-cs300134-'+place+'-jingdian-1-{}'
     htm = requests.get(url, headers=headers)
@@ -107,9 +107,10 @@ def getList():
 
 
 def listToExcel(list, name):
-    df = pd.DataFrame(list, columns=['景点名称', '级别', '所在区域', '起步价', '销售量', '热度', '地址', '经纬度', '标语', '详情网址'])
+    # df = pd.DataFrame(list, columns=['景点名称', '级别', '所在区域', '起步价', '销售量', '热度', '地址', '经纬度', '标语', '详情网址'])
+    df = pd.DataFrame(list)
     # df.to_csv(name + ".csv", sep=',')
-    dirName = 'xlsx'
+    dirName = 'html'
     writer = pd.ExcelWriter(dirName+'/hotplace.xlsx', engine='xlsxwriter')
     df.to_excel(writer, sheet_name='Sheet1')
     writer.save()
