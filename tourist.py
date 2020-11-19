@@ -74,8 +74,7 @@ def getList():
                 sight_level = sight_level[0].replace('景区', '')
             else:
                 sight_level = 0
-            sight_area = inf.xpath('.//span[@class="area"]/a/text()')[0]
-            sight_hot = inf.xpath('.//span[@class="product_star_level"]/em/span/text()')[0].replace('热度 ', '')
+            # sight_area = inf.xpath('.//span[@class="area"]/a/text()')[0]
             sight_add = inf.xpath('.//p[@class ="address color999"]/span/text()')[0]
             sight_add = re.sub('地址：|（.*?）|\(.*?\)|，.*?$|\/.*?$', '', str(sight_add))
             sight_slogen = inf.xpath(".//div[@class='intro color999']/text()")
@@ -83,25 +82,23 @@ def getList():
                 sight_slogen = sight_slogen[0]
             else:
                 sight_slogen = ' '
-            sight_price = inf.xpath(".//span[@class='sight_item_price']/em/text()")
-            if len(sight_price):
-                sight_price = sight_price[0]
-            else:
-                sight_price = 0
-            sight_soldnum = inf.xpath('.//span[@class="hot_num"]/text()')
-            if len(sight_soldnum):
-                sight_soldnum = sight_soldnum[0]
-            else:
-                sight_soldnum = 0
+            # sight_price = inf.xpath(".//span[@class='sight_item_price']/em/text()")
+            # if len(sight_price):
+            #     sight_price = sight_price[0]
+            # else:
+            #     sight_price = 0
+            # sight_soldnum = inf.xpath('.//span[@class="hot_num"]/text()')
+            # if len(sight_soldnum):
+            #     sight_soldnum = sight_soldnum[0]
+            # else:
+            #     sight_soldnum = 0
             # sight_point = inf.xpath('.//div[@class="result_list"]/div/@data-point')[0]
             sight_point = inf.xpath('.//@data-point')[0]
             # sight_la, sight_lo = sight_point.split(',')
             print(sight_point)
             # .为当前序号，不加则从第一个开始
             sight_url = inf.xpath('.//div[@class="sight_item_pop"]//a/@href')[0]
-            sightlist.append(
-                [sight_name, sight_level, sight_area, float(sight_price), int(sight_soldnum), float(sight_hot),
-                 sight_add.replace('地址：', ''), sight_point, sight_slogen, sight_url])
+            sightlist.append([sight_name, sight_level,sight_add.replace('地址：', ''), sight_point, sight_slogen, sight_url])
         time.sleep(10)
     return sightlist
 
@@ -109,11 +106,11 @@ def getList():
 def listToExcel(list, name):
     # df = pd.DataFrame(list, columns=['景点名称', '级别', '所在区域', '起步价', '销售量', '热度', '地址', '经纬度', '标语', '详情网址'])
     df = pd.DataFrame(list)
-    # df.to_csv(name + ".csv", sep=',')
-    dirName = 'html'
-    writer = pd.ExcelWriter(dirName+'/hotplace.xlsx', engine='xlsxwriter')
-    df.to_excel(writer, sheet_name='Sheet1')
-    writer.save()
+    dirName = 'html/'
+    df.to_csv( dirName + name + ".csv", sep=',', header=None)
+    # writer = pd.ExcelWriter(dirName+'/hotplace.xlsx', engine='xlsxwriter')
+    # df.to_excel(writer, sheet_name='Sheet1')
+    # writer.save()
 
 
 def main():

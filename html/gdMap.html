@@ -176,7 +176,7 @@
                 });
                 rentMarkerArray.push(rentMarker);
 
-                rentMarker.content = "<div>详情网址：<a target = '_blank' href='https://bj.58.com/pinpaigongyu/?key=" + address + "'>" + address + "</a><div>"
+                rentMarker.content = "<div>详情网址：<a target = '_blank' href='https://piao.qunar.com/" + address + "'>" + address + "</a><div>"
                 rentMarker.on('click', function(e) {
                     infoWindow.setContent(e.target.content);
                     infoWindow.open(map, e.target.getPosition());
@@ -233,7 +233,8 @@
         $.get(fileName, function(data) {
             data = data.split("\n");
             data.forEach(function(item, index) {
-                rent_locations.add(item.split(",")[0]);
+                rent_locations.add(item.split(",")[1]);
+                rent_locations.add(item.split(",")[7]);
             });
             rent_locations.forEach(function(element, index) {
                 addMarkerByAddress(element);
