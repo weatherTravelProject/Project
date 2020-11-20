@@ -160,7 +160,7 @@
         });
     }
 
-    function addMarkerByAddress(address) {
+    function addMarkerByAddress(address, url) {
         var geocoder = new AMap.Geocoder({
             city: "广州",
             radius: 1000
@@ -176,7 +176,7 @@
                 });
                 rentMarkerArray.push(rentMarker);
 
-                rentMarker.content = "<div>详情网址：<a target = '_blank' href='https://piao.qunar.com/" + address + "'>" + address + "</a><div>"
+                rentMarker.content = "<div>详情网址：<a target = '_blank' href='https://piao.qunar.com" + url + "'>" + address + "</a><div>"
                 rentMarker.on('click', function(e) {
                     infoWindow.setContent(e.target.content);
                     infoWindow.open(map, e.target.getPosition());
@@ -230,14 +230,19 @@
     function loadRentLocationByFile(fileName) {
         delRentLocation();
         var rent_locations = new Set();
+        var rent_urls = new Set();
         $.get(fileName, function(data) {
-            data = data.split("\n");
-            data.forEach(function(item, index) {
+            locations = data.split("\n");
+            urls = data.split("\n");
+            locations.forEach(function(item, index) {
                 rent_locations.add(item.split(",")[1]);
-                rent_locations.add(item.split(",")[7]);
             });
+            urls.forEach(function (item, index) {
+                rent_urls.add(item.split(",")[7]);
+            })
             rent_locations.forEach(function(element, index) {
-                addMarkerByAddress(element);
+                rent_urls.forEach(function (url, index) {
+                    addMarkerByAddress(element, url);
             });
         });
     }
