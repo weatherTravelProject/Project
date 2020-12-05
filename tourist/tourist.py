@@ -10,9 +10,6 @@ import pandas as pd  # 处理表格进行数据分析
 
 
 def getPage(url):  # 获取链接中的网页内容
-    # 网络请求时需要包含较为完整的headers(请求头)
-    # 这里的headers就是requests header的内容
-    # 除了cookie 和 user-agent其他都和我的电脑一样
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
         'Accept-Encoding': 'gzip, deflate',
@@ -52,14 +49,14 @@ def getList():
         'X-Requested-With': 'XMLHttpRequest'
     }
     place = '天河'
-    url = 'http://piao.qunar.com/ticket/list.htm?keyword=' + place + '&region=&from=mpl_search_suggest&page={}'
+    url = 'http://piao.qunar.com/ticket/list.htm?keyword=' + place + '&region=&from=mpl_search_suggest&sort=pp&page={}'
     # url = 'https://travel.qunar.com/p-cs300134-'+place+'-jingdian-1-{}'
     htm = requests.get(url, headers=headers)
     html = etree.HTML(htm.text)
     num = getPageNum(html)
     i = 1
     sightlist = []
-    while i < num:
+    while i < 3:
         page = getPage(url.format(i))  # 这里调用了getPage函数获取了网页数据
         selector = etree.HTML(page.text)
         print('正在爬取第', str(i), '页景点信息')
@@ -99,7 +96,7 @@ def getList():
             # .为当前序号，不加则从第一个开始
             sight_url = inf.xpath('.//div[@class="sight_item_pop"]//a/@href')[0]
             sightlist.append([sight_name, sight_level,sight_add.replace('地址：', ''), sight_point, sight_slogen, sight_url])
-        time.sleep(10)
+        time.sleep(2)
     return sightlist
 
 

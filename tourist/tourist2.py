@@ -114,8 +114,6 @@ def listToExcel(list, name):
     # df.to_excel(writer, sheet_name='Sheet1')
     # writer.save()
 
-import general_unit
-from bs4 import BeautifulSoup
 
 def main():
     '''url = "https://travel.qunar.com/place/"

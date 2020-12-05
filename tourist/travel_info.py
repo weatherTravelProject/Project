@@ -4,9 +4,8 @@
 @Date:2020/11/01
 """
 from bs4 import BeautifulSoup
-import general_unit
+from tourist import general_unit
 import math
-import get_travel_list
 import traceback
 
 #全局变量定义

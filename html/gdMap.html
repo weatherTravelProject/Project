@@ -96,6 +96,7 @@
     var rentMarkerArray = [];
     var polygonArray = [];
     var amapTransfer;
+    var amapDriving;
 
     var infoWindow = new AMap.InfoWindow({
         offset: new AMap.Pixel(0, -30)
@@ -160,7 +161,7 @@
         });
     }
 
-    function addMarkerByAddress(address, url) {
+    function addMarkerByAddress(address) {
         var geocoder = new AMap.Geocoder({
             city: "广州",
             radius: 1000
@@ -176,7 +177,8 @@
                 });
                 rentMarkerArray.push(rentMarker);
 
-                rentMarker.content = "<div>详情网址：<a target = '_blank' href='https://piao.qunar.com" + url + "'>" + address + "</a><div>"
+                // rentMarker.content = "<div>详情网址：<a target = '_blank' href='https://piao.qunar.com" + url + "'>" + address + "</a><div>"
+                rentMarker.content = "<div>景点：<p>" + address + "</p><div>"
                 rentMarker.on('click', function(e) {
                     infoWindow.setContent(e.target.content);
                     infoWindow.open(map, e.target.getPosition());
@@ -192,6 +194,18 @@
                     }, {
                         keyword: address
                     }], function(status, result) {})
+                    // if (amapDriving) amapDriving.clear();
+                    // amapDriving = new AMap.Driving({
+                    //     map: map,
+                    //     policy: AMap.DrivingPolicy.LEAST_TIME,
+                    //     city: "广州市",
+                    //     panel: 'transfer-panel'
+                    // });
+                    // amapTransfer.search([{
+                    //     keyword: goAddress
+                    // }, {
+                    //     keyword: address
+                    // }], function(status, result) {})
                 });
             }
         })
@@ -230,19 +244,19 @@
     function loadRentLocationByFile(fileName) {
         delRentLocation();
         var rent_locations = new Set();
-        var rent_urls = new Set();
+        // var rent_urls = new Set();
+        // var url = "/ticket/detail_506326066.html?st=a3clM0QlRTQlQkElOTElRTYlQjUlQUUlMjZpZCUzRDQwMjQ4JTI2dHlwZSUzRDAlMjZpZHglM0QxJTI2cXQlM0RyZWdpb24lMjZhcGslM0QyJTI2c2MlM0RXV1clMjZ1ciUzRCVFNSVCOSVCRiVFNSVCNyU5RSUyNmxyJTNEJUU1JUI5JUJGJUU1JUI3JTlFJTI2ZnQlM0QlN0IlN0Q%3D#from=mpl_search_suggest"
         $.get(fileName, function(data) {
             locations = data.split("\n");
-            urls = data.split("\n");
+            // urls = data.split("\n");
             locations.forEach(function(item, index) {
                 rent_locations.add(item.split(",")[1]);
             });
-            urls.forEach(function (item, index) {
-                rent_urls.add(item.split(",")[7]);
-            })
+            // urls.forEach(function (item, index) {
+            //     rent_urls.add(item.split(",")[7]);
+            // })
             rent_locations.forEach(function(element, index) {
-                rent_urls.forEach(function (url, index) {
-                    addMarkerByAddress(element, url);
+                addMarkerByAddress(element);
             });
         });
     }

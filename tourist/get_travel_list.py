@@ -5,7 +5,7 @@
 """
 import traceback
 from bs4 import BeautifulSoup
-import general_unit
+from tourist import general_unit
 
 #全局变量定义
 diqus=[]
