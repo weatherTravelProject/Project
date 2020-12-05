@@ -5,12 +5,14 @@ from bs4 import BeautifulSoup  # 解析页面模块
 import re    
 #re模块是python独有的匹配字符串的模块，该模块中提供的很多功能是基于正则表达式实现的
 from pyecharts import Geo
- 
+import os
  
 import csv
 import pygal
 from weather import cityinfo
 
+root_path = os.path.abspath(os.path.dirname(__file__))
+save_path = root_path + "\\data\\"
 ''' 广东省21个行政区 '''
 name0 = ['广州','深圳','珠海','汕头','佛山','韶关','湛江','肇庆','江门','茂名','惠州','梅州','汕尾','河源','阳江','清远','东莞','中山','潮州','揭阳','云浮']
 
@@ -67,7 +69,7 @@ attr, value = name0, lowTemp
 geo.add("", attr, value, visual_range=[-10, 30], maptype='广东',label_formatter='{b}',
     visual_text_color="#fff", symbol_size=13, is_visualmap=True,is_label_show = True,
     label_text_color="#00FF00", type="effectScatter",effect_scale=3)  
-geo.render(r'C:\Users\Administrator\Desktop\广东省行政区最低气温图.html')
+geo.render(save_path + '广东省行政区最低气温图.html')
 print('广东省行政区最低气温图生成成功！')
 
 geo = Geo("广东省行政区最高气温", "High Temperature",  page_title='广东省行政区最高气温图',
@@ -77,7 +79,7 @@ attr, value = name0, highTemp
 geo.add("", attr, value, visual_range=[-10, 30], maptype='广东',label_formatter='{b}',
     visual_text_color="#fff", symbol_size=13, is_visualmap=True,is_label_show = True,
     label_text_color="#00FF00", type="effectScatter",effect_scale=3)  
-geo.render(r'C:\Users\Administrator\Desktop\广东省行政区最高气温图.html')
+geo.render(save_path + '广东省行政区最高气温图.html')
 print('广东省行政区最高气温图生成成功！')
 
 while True:
@@ -144,7 +146,7 @@ for day in li:  # 便利找到的每一个li
         i = i + 1
 
 # 将最终的获取的天气写入csv文件
-with open(r'C:\Users\Administrator\Desktop\weather.csv', 'w', errors='ignore', newline='') as f:
+with open(save_path + 'weather.csv', 'w', errors='ignore', newline='') as f:
     f_csv = csv.writer(f)
     f_csv.writerows([cityname])
     f_csv.writerows(final)
@@ -166,7 +168,7 @@ bar.legend_at_bottom = True
 bar.show_x_guides = False
 bar.show_y_guides = True
 
-bar.render_to_file(r'C:\Users\Administrator\Desktop\temperate.svg')
+bar.render_to_file(save_path + 'temperate.svg')
 print('\nsvg文件保存成功,可以使用浏览器打开哦')
 
 
