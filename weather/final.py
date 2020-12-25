@@ -1,6 +1,6 @@
 import requests
 import urllib.request
-from urllib.request import quote
+from urllib.parse import quote
 from bs4 import BeautifulSoup  # 解析页面模块
 import re    
 #re模块是python独有的匹配字符串的模块，该模块中提供的很多功能是基于正则表达式实现的
