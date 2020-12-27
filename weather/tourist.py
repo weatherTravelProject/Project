@@ -3,9 +3,8 @@
 @Author:Sheng Yawen
 @Date: 2020/10/18 
 """
-import os
 import time, requests, re  # time用于延时，requests用于请求网页数据，json转换json数据格式，re正则
-
+import webbrowser
 from lxml import etree  # 解析xpath网页结构
 import pandas as pd  # 处理表格进行数据分析
 import weather.final
@@ -97,16 +96,11 @@ def listToExcel(list, name):
 
 
 def main():
-    root_path = os.path.abspath(os.path.dirname(__file__))
     while(weather.final.cityname):
         sightlist = getList(weather.final.cityname)  # main后第一个运行getList()
         listToExcel(sightlist, 'hotplace')
         break
-    cmd1 = "cd " + root_path + "\\data"
-    cmd2 = 'start "" "gdMap.html"'
-    cmd = cmd1 + " && " + cmd2
-    os.system(cmd)
-
+    webbrowser.open("http://localhost:63342/Project/weather/data/gdMap.html")
 
 if __name__ == '__main__':  # 代码是从main函数开始的
     main()
