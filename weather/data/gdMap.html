@@ -95,7 +95,6 @@
     var rentMarkerArray = [];
     var polygonArray = [];
     var amapTransfer;
-    var amapDriving;
 
     var infoWindow = new AMap.InfoWindow({
         offset: new AMap.Pixel(0, -30)
@@ -107,16 +106,6 @@
 
     AMap.event.addListener(auto, "select", locationSelected);
 
-
-    function takeBus(radio) {
-        vehicle = radio.value;
-        loadLocation()
-    }
-
-    function takeDriving(radio) {
-        vehicle = radio.value;
-        loadLocation()
-    }
 
     function importRentInfo(fileInfo) {
         var file = fileInfo.files[0].name;
@@ -160,9 +149,9 @@
         });
     }
 
-    function addMarkerByAddress(address) {
+    function addMarkerByAddress(address, city) {
         var geocoder = new AMap.Geocoder({
-            city: "广州",
+            city: city,
             radius: 1000
         });
         geocoder.getLocation(address, function(status, result) {
@@ -175,8 +164,6 @@
                     position: [geocode.location.getLng(), geocode.location.getLat()]
                 });
                 rentMarkerArray.push(rentMarker);
-
-                // rentMarker.content = "<div>详情网址：<a target = '_blank' href='https://piao.qunar.com" + url + "'>" + address + "</a><div>"
                 rentMarker.content = "<div>景点：<p>" + address + "</p><div>"
                 rentMarker.on('click', function(e) {
                     infoWindow.setContent(e.target.content);
@@ -185,7 +172,7 @@
                     amapTransfer = new AMap.Transfer({
                         map: map,
                         policy: AMap.TransferPolicy.LEAST_TIME,
-                        city: "广州市",
+                        city: city,
                         panel: 'transfer-panel'
                     });
                     amapTransfer.search([{
@@ -193,18 +180,6 @@
                     }, {
                         keyword: address
                     }], function(status, result) {})
-                    // if (amapDriving) amapDriving.clear();
-                    // amapDriving = new AMap.Driving({
-                    //     map: map,
-                    //     policy: AMap.DrivingPolicy.LEAST_TIME,
-                    //     city: "广州市",
-                    //     panel: 'transfer-panel'
-                    // });
-                    // amapTransfer.search([{
-                    //     keyword: goAddress
-                    // }, {
-                    //     keyword: address
-                    // }], function(status, result) {})
                 });
             }
         })
@@ -241,21 +216,17 @@
     }
 
     function loadRentLocationByFile(fileName) {
+        var city = "广州";
         delRentLocation();
         var rent_locations = new Set();
-        // var rent_urls = new Set();
-        // var url = "/ticket/detail_506326066.html?st=a3clM0QlRTQlQkElOTElRTYlQjUlQUUlMjZpZCUzRDQwMjQ4JTI2dHlwZSUzRDAlMjZpZHglM0QxJTI2cXQlM0RyZWdpb24lMjZhcGslM0QyJTI2c2MlM0RXV1clMjZ1ciUzRCVFNSVCOSVCRiVFNSVCNyU5RSUyNmxyJTNEJUU1JUI5JUJGJUU1JUI3JTlFJTI2ZnQlM0QlN0IlN0Q%3D#from=mpl_search_suggest"
-        $.get(fileName, function(data) {
+            $.get(fileName, function(data) {
             locations = data.split("\n");
-            // urls = data.split("\n");
+            city = data.split(",")[1];
             locations.forEach(function(item, index) {
-                rent_locations.add(item.split(",")[1]);
+                rent_locations.add(item.split(",")[2]);
             });
-            // urls.forEach(function (item, index) {
-            //     rent_urls.add(item.split(",")[7]);
-            // })
             rent_locations.forEach(function(element, index) {
-                addMarkerByAddress(element);
+                addMarkerByAddress(element, city);
             });
         });
     }
