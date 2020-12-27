@@ -3,8 +3,9 @@
 @Author:Sheng Yawen
 @Date: 2020/10/18 
 """
-
+import os
 import time, requests, re  # time用于延时，requests用于请求网页数据，json转换json数据格式，re正则
+
 from lxml import etree  # 解析xpath网页结构
 import pandas as pd  # 处理表格进行数据分析
 import weather.final
@@ -70,7 +71,6 @@ def getList(cityName):
                 sight_level = sight_level[0].replace('景区', '')
             else:
                 sight_level = 0
-            # sight_area = inf.xpath('.//span[@class="area"]/a/text()')[0]
             sight_add = inf.xpath('.//p[@class ="address color999"]/span/text()')[0]
             sight_add = re.sub('地址：|（.*?）|\(.*?\)|，.*?$|\/.*?$', '', str(sight_add))
             sight_slogen = inf.xpath(".//div[@class='intro color999']/text()")
@@ -78,23 +78,10 @@ def getList(cityName):
                 sight_slogen = sight_slogen[0]
             else:
                 sight_slogen = ' '
-            # sight_price = inf.xpath(".//span[@class='sight_item_price']/em/text()")
-            # if len(sight_price):
-            #     sight_price = sight_price[0]
-            # else:
-            #     sight_price = 0
-            # sight_soldnum = inf.xpath('.//span[@class="hot_num"]/text()')
-            # if len(sight_soldnum):
-            #     sight_soldnum = sight_soldnum[0]
-            # else:
-            #     sight_soldnum = 0
-            # sight_point = inf.xpath('.//div[@class="result_list"]/div/@data-point')[0]
             sight_point = inf.xpath('.//@data-point')[0]
-            # sight_la, sight_lo = sight_point.split(',')
             print(sight_point)
             # .为当前序号，不加则从第一个开始
-            sight_url = inf.xpath('.//div[@class="sight_item_pop"]//a/@href')[0]
-            sightlist.append([sight_name, sight_level,sight_add.replace('地址：', ''), sight_point, sight_slogen, sight_url])
+            sightlist.append([cityName, sight_name, sight_level, sight_add.replace('地址：', ''), sight_point, sight_slogen])
         time.sleep(2)
     return sightlist
 
@@ -110,10 +97,15 @@ def listToExcel(list, name):
 
 
 def main():
+    root_path = os.path.abspath(os.path.dirname(__file__))
     while(weather.final.cityname):
         sightlist = getList(weather.final.cityname)  # main后第一个运行getList()
         listToExcel(sightlist, 'hotplace')
         break
+    cmd1 = "cd " + root_path + "\\data"
+    cmd2 = 'start "" "gdMap.html"'
+    cmd = cmd1 + " && " + cmd2
+    os.system(cmd)
 
 
 if __name__ == '__main__':  # 代码是从main函数开始的
