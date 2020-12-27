@@ -7,7 +7,7 @@ import time, requests, re  # time用于延时，requests用于请求网页数据
 import webbrowser
 from lxml import etree  # 解析xpath网页结构
 import pandas as pd  # 处理表格进行数据分析
-import weather.final
+from weather import final
 
 def getPage(url):  # 获取链接中的网页内容
     headers = {
@@ -96,8 +96,8 @@ def listToExcel(list, name):
 
 
 def main():
-    while(weather.final.cityname):
-        sightlist = getList(weather.final.cityname)  # main后第一个运行getList()
+    while(final.cityname):
+        sightlist = getList(final.cityname)  # main后第一个运行getList()
         listToExcel(sightlist, 'hotplace')
         break
     webbrowser.open("http://localhost:63342/Project/weather/data/gdMap.html")
