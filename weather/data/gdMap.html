@@ -54,7 +54,7 @@
     }
     </style>
 </head>
-
+<!--展示面板，进入其他页面或导入景点文件-->
 <body>
     <div id="container"></div>
     <div class="control-panel">
@@ -92,6 +92,7 @@
     </div>
     <div id="transfer-panel"></div>
     <script>
+        /*生成全局地图*/
     var map = new AMap.Map("container", {
         resizeEnable: true,
         zoomEnable: true,
@@ -139,9 +140,9 @@
     }
 
 
-    function addMarkerByAddress(address, city) {
+    function addMarkerByAddress(address) {
         var geocoder = new AMap.Geocoder({
-            city: city,
+            city: "",
             radius: 1000
         });
         geocoder.getLocation(address, function(status, result) {
@@ -191,19 +192,19 @@
             }
         })
     }
-
+    /*导入文件处理*/
     function loadRentLocationByFile(fileName) {
-        var city = "广州";
         delRentLocation();
         var rent_locations = new Set();
             $.get(fileName, function(data) {
             locations = data.split("\n");
-            city = data.split(",")[1];
             locations.forEach(function(item, index) {
+                /*取出地址*/
                 rent_locations.add(item.split(",")[2]);
             });
             rent_locations.forEach(function(element, index) {
-                addMarkerByAddress(element, city);
+                /*地图上加入景点*/
+                addMarkerByAddress(element);
             });
         });
     }
