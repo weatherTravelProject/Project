@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>旅游景点推荐</title>
+    <title>天气和景点展示</title>
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/jquery.range.css" />
     <script src="http://cache.amap.com/lbs/static/jquery-1.9.1.js"></script>
@@ -76,6 +76,19 @@
                 <input type="file" name="file" onChange="importRentInfo(this)" />
             </div>
         </div>
+        <div class="control-entry">
+            <label>5A,4A景区占比图：</label>
+            <div class="control-input">
+                <a href="5a,4a景区占比及数量-饼图.html">5A,4A景区占比及数量</a>
+            </div>
+        </div>
+        <div class="control-entry">
+            <label>排名前十景点热度柱状图：</label>
+            <div class="control-input">
+                <a href="排名前十景点热度-柱状图.html">排名前十景点热度柱状图</a>
+            </div>
+        </div>
+
     </div>
     <div id="transfer-panel"></div>
     <script>
@@ -83,18 +96,16 @@
         resizeEnable: true,
         zoomEnable: true,
         center: [113.27, 23.13],
-        zoom: 11
+        zoom: 10
     });
 
     var scale = new AMap.Scale();
     map.addControl(scale);
 
-    var arrivalRange = new AMap.ArrivalRange();
-    var x, y, t, vehicle = "SUBWAY,BUS";
+    var x, y, t;
     var goAddress, goMarker;
     var rentMarkerArray = [];
     var polygonArray = [];
-    var amapTransfer;
 
     var infoWindow = new AMap.InfoWindow({
         offset: new AMap.Pixel(0, -30)
@@ -128,27 +139,6 @@
     }
 
 
-    function loadRange(x, y, t, color, v) {
-        arrivalRange.search([x, y], t, function(status, result) {
-            if (result.bounds) {
-                for (var i = 0; i < result.bounds.length; i++) {
-                    var polygon = new AMap.Polygon({
-                        map: map,
-                        fillColor: color,
-                        fillOpacity: "0.4",
-                        strokeColor: color,
-                        strokeOpacity: "0.8",
-                        strokeWeight: 1
-                    });
-                    polygon.setPath(result.bounds[i]);
-                    polygonArray.push(polygon);
-                }
-            }
-        }, {
-            policy: v
-        });
-    }
-
     function addMarkerByAddress(address, city) {
         var geocoder = new AMap.Geocoder({
             city: city,
@@ -168,18 +158,6 @@
                 rentMarker.on('click', function(e) {
                     infoWindow.setContent(e.target.content);
                     infoWindow.open(map, e.target.getPosition());
-                    if (amapTransfer) amapTransfer.clear();
-                    amapTransfer = new AMap.Transfer({
-                        map: map,
-                        policy: AMap.TransferPolicy.LEAST_TIME,
-                        city: city,
-                        panel: 'transfer-panel'
-                    });
-                    amapTransfer.search([{
-                        keyword: goAddress
-                    }, {
-                        keyword: address
-                    }], function(status, result) {})
                 });
             }
         })
@@ -209,7 +187,6 @@
                 x = geocode.location.getLng();
                 y = geocode.location.getLat();
                 loadMarker(x, y);
-                loadRange(x, y, 60, "#3f67a5", vehicle);
                 map.setZoomAndCenter(12, [x, y]);
             }
         })
